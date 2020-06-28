@@ -3,6 +3,7 @@ const appContext = React.createContext()
 
 function AppContextProvider({children}) {
     const [images, setImages] = useState([])
+    const [cartItems, setCartItems] = useState([])
 
     //console.log(images)
 
@@ -20,6 +21,19 @@ function AppContextProvider({children}) {
         setImages(updatePhotos)
     }
 
+    function addToCart(newItems) {
+        setCartItems(prevItems => [...prevItems, newItems])
+    }
+
+    function removeCartItems(id) {
+        setCartItems(prevItems => prevItems.filter(items => items.id !== id))
+    }
+
+    function emptyCart() {
+        setCartItems([])
+    }
+    
+
     useEffect(() => {
         fetch(url)
             .then(response => response.json())
@@ -27,7 +41,7 @@ function AppContextProvider({children}) {
     }, [])
 
     return(
-        <appContext.Provider value={{images, toggleMethod}}>
+        <appContext.Provider value={{images, toggleMethod, addToCart, cartItems, removeCartItems, emptyCart}}>
             {children}
         </appContext.Provider>
     )
